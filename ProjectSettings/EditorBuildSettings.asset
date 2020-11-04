@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 7ffc6e6d5d6fd48bc8f620a89e92ce43
+  - enabled: 1
+    path: Assets/Scenes/AcceptQuest.unity
+    guid: 2428a724d69234e51890312ace16ad6c
+  - enabled: 1
+    path: Assets/Scenes/AutoGeneration.unity
+    guid: e748b5aa6b62248119f1480d62e4a186
   m_configObjects: {}

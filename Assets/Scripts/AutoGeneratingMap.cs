@@ -27,7 +27,11 @@ public class AutoGeneratingMap : MonoBehaviour
 
     public GameObject platformCoin;
 
+    public GameObject finalPlatform;
+
     public GameObject coin;
+
+    public GameObject melt;
 
     public GameObject trigger1;
 
@@ -56,7 +60,7 @@ public class AutoGeneratingMap : MonoBehaviour
 
     Vector3 enemyTrigger2Pos;
 
-
+    Vector3 lowPoint = new Vector3(9999999, 99999999999, 9999999999);
 
 
     GameObject currentPlatform;
@@ -102,7 +106,6 @@ public class AutoGeneratingMap : MonoBehaviour
         MakeFinalPlatform();
 
 
-
     }
 
     private void FixedUpdate()
@@ -117,6 +120,8 @@ public class AutoGeneratingMap : MonoBehaviour
 
 
         }
+
+        FellOff();
     }
 
     void MakeMorePlatforms()
@@ -165,39 +170,31 @@ public class AutoGeneratingMap : MonoBehaviour
                     nextPos.x = currentPos.x - (currentLength / 2) - (previousLength / 2) + 7.5f;
                     nextPos.y = currentPos.y - (currentLength / 2) + 1f;
                     currentPlatform = Instantiate(platforms[randomPlatform], nextPos, Quaternion.Euler(new Vector3(0, 0, 45)));
+                    CheckLowPoint();
                     slantedPlatform = true;
                     nextPos.x -= 30f;
                     nextPos.y -= 20f;
                     currentPlatform.tag = "SlantGroundLeft";
                     coinPlatformPos.x = nextPos.x - 2f;
-                    coinPlatformPos.y = nextPos.y + 6f;
+                    coinPlatformPos.y = nextPos.y + 5f;
                     coinPlatformPos.z = nextPos.z;
                     Instantiate(platformCoin, coinPlatformPos, Quaternion.identity);
                     coinPos.x = coinPlatformPos.x - 3.8f;
-                    coinPos.y = coinPlatformPos.y + 1f;
+                    coinPos.y = coinPlatformPos.y + 9f;
                     coinPos.z = 0;
-                    for (int j = 0; j < 8; j++)
+                    for (int j = 0; j < 5; j++)
                     {
                         Instantiate(coin, coinPos, Quaternion.identity);
-                        coinPos.x += 1f;
+                        coinPos.x += 1.5f;
 
                     }
                     coinPos.x = coinPlatformPos.x - 3.8f;
-                    coinPos.y = coinPlatformPos.y + 2f;
+                    coinPos.y = coinPlatformPos.y + 11f;
                     coinPos.z = 0;
-                    for (int j = 0; j < 8; j++)
+                    for (int j = 0; j < 5; j++)
                     {
                         Instantiate(coin, coinPos, Quaternion.identity);
-                        coinPos.x += 1f;
-
-                    }
-                    coinPos.x = coinPlatformPos.x - 3.8f;
-                    coinPos.y = coinPlatformPos.y + 3f;
-                    coinPos.z = 0;
-                    for (int j = 0; j < 8; j++)
-                    {
-                        Instantiate(coin, coinPos, Quaternion.identity);
-                        coinPos.x += 1f;
+                        coinPos.x += 1.5f;
 
                     }
 
@@ -205,6 +202,7 @@ public class AutoGeneratingMap : MonoBehaviour
                 else if (!slantedPlatform && !movingPlatform)
                 {
                     currentPlatform = Instantiate(platforms[randomPlatform], nextPos, Quaternion.identity);
+                    CheckLowPoint();
                     MakeCoinPlatforms();
                     slantedPlatform = false;
                     currentPlatform.tag = "Ground";
@@ -215,6 +213,7 @@ public class AutoGeneratingMap : MonoBehaviour
                 else
                 {
                     currentPlatform = Instantiate(platforms[randomPlatform], nextPos, Quaternion.identity);
+                    CheckLowPoint();
                     slantedPlatform = false;
 
                 }
@@ -224,7 +223,7 @@ public class AutoGeneratingMap : MonoBehaviour
                     tempEnd.x = nextPos.x - randomMovingX;
                     tempEnd.y = nextPos.y - randomMovingY;
                     tempEnd.z = nextPos.z;
-                    platformsOnScreen[i] = new Platform(nextPos, tempEnd, 0, currentPlatform);
+                    platformsOnScreen[i] = new Platform(tempEnd, nextPos, 0, currentPlatform);
                     wasPreviousMoving = true;
                     currentPos = tempEnd;
 
@@ -253,39 +252,31 @@ public class AutoGeneratingMap : MonoBehaviour
                     nextPos.x = currentPos.x + (currentLength / 2) + (previousLength / 2) - 7.7f;
                     nextPos.y = currentPos.y - (currentLength / 2) + 1f;
                     currentPlatform = Instantiate(platforms[randomPlatform], nextPos, Quaternion.Euler(new Vector3(0, 0, -45)));
+                    CheckLowPoint();
                     slantedPlatform = true;
                     nextPos.x += 30f;
                     nextPos.y -=20f;
                     currentPlatform.tag = "SlantGroundRight";
                     coinPlatformPos.x = nextPos.x;
-                    coinPlatformPos.y = nextPos.y + 3f;
+                    coinPlatformPos.y = nextPos.y + 5f;
                     coinPlatformPos.z = nextPos.z;
                     Instantiate(platformCoin, coinPlatformPos, Quaternion.identity);
                     coinPos.x = coinPlatformPos.x - 3.8f;
-                    coinPos.y = coinPlatformPos.y + 1f;
+                    coinPos.y = coinPlatformPos.y + 9f;
                     coinPos.z = 0;
-                    for (int j = 0; j < 8; j++)
+                    for (int j = 0; j < 5; j++)
                     {
                         Instantiate(coin, coinPos, Quaternion.identity);
-                        coinPos.x += 1f;
+                        coinPos.x += 1.5f;
 
                     }
                     coinPos.x = coinPlatformPos.x - 3.8f;
-                    coinPos.y = coinPlatformPos.y + 2f;
+                    coinPos.y = coinPlatformPos.y + 11f;
                     coinPos.z = 0;
-                    for (int j = 0; j < 8; j++)
+                    for (int j = 0; j < 5; j++)
                     {
                         Instantiate(coin, coinPos, Quaternion.identity);
-                        coinPos.x += 1f;
-
-                    }
-                    coinPos.x = coinPlatformPos.x - 3.8f;
-                    coinPos.y = coinPlatformPos.y + 3f;
-                    coinPos.z = 0;
-                    for (int j = 0; j < 8; j++)
-                    {
-                        Instantiate(coin, coinPos, Quaternion.identity);
-                        coinPos.x += 1f;
+                        coinPos.x += 1.5f;
 
                     }
 
@@ -293,6 +284,7 @@ public class AutoGeneratingMap : MonoBehaviour
                 else if (!slantedPlatform && !movingPlatform)
                 {
                     currentPlatform = Instantiate(platforms[randomPlatform], nextPos, Quaternion.identity);
+                    CheckLowPoint();
                     MakeCoinPlatforms();
                     slantedPlatform = false;
                     currentPlatform.tag = "Ground";
@@ -303,6 +295,7 @@ public class AutoGeneratingMap : MonoBehaviour
                 else
                 {
                     currentPlatform = Instantiate(platforms[randomPlatform], nextPos, Quaternion.identity);
+                    CheckLowPoint();
                     slantedPlatform = false;
 
                 }
@@ -334,6 +327,15 @@ public class AutoGeneratingMap : MonoBehaviour
 
     }
 
+    void FellOff()
+    {
+        if (melt.transform.position.y < (lowPoint.y - 20f))
+        {
+            GameManager.instance.GameOver();
+            Destroy(melt);
+        }
+    }
+
     void MakeFinalPlatform()
     {
         if (randomPlatform == 8)
@@ -350,6 +352,8 @@ public class AutoGeneratingMap : MonoBehaviour
             }
             nextPos.y -= 5f;
             Instantiate(platforms[3], nextPos, Quaternion.identity);
+            CheckLowPoint();
+
         }
         if (decideDirection == 0)
         {
@@ -361,8 +365,17 @@ public class AutoGeneratingMap : MonoBehaviour
         }
         finalPos.y = nextPos.y + 6f;
         finalPos.z = nextPos.z;
-        Instantiate(platformCoin, finalPos, Quaternion.identity);
+        Instantiate(finalPlatform, finalPos, Quaternion.identity);
 
+
+    }
+
+    void CheckLowPoint()
+    {
+        if (nextPos.y <= lowPoint.y)
+        {
+            lowPoint = nextPos;
+        }
 
     }
 
@@ -373,37 +386,27 @@ public class AutoGeneratingMap : MonoBehaviour
             if (randomNumOneOrTwo == 0 || randomNumOneOrTwo == 3)
             {
                 randomCoinPlatformPosX = Random.Range(-15f, 15f);
-                randomCoinPlatformPosY = Random.Range(2.8f, 3.3f);
+                randomCoinPlatformPosY = Random.Range(6.5f, 8f);
                 coinPlatformPos.x = nextPos.x + randomCoinPlatformPosX;
                 coinPlatformPos.y = nextPos.y + randomCoinPlatformPosY;
                 coinPlatformPos.z = nextPos.z;
-                print(randomCoinPlatformPosY);
                 Instantiate(platformCoin, coinPlatformPos, Quaternion.identity);
                 coinPos.x = coinPlatformPos.x - 3.8f;
-                coinPos.y = coinPlatformPos.y + 1f;
+                coinPos.y = coinPlatformPos.y + 9f;
                 coinPos.z = 0;
-                for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 5; j++)
                 {
                     Instantiate(coin, coinPos, Quaternion.identity);
-                    coinPos.x += 1f;
+                    coinPos.x += 1.5f;
 
                 }
                 coinPos.x = coinPlatformPos.x - 3.8f;
-                coinPos.y = coinPlatformPos.y + 2f;
+                coinPos.y = coinPlatformPos.y + 11f;
                 coinPos.z = 0;
-                for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 5; j++)
                 {
                     Instantiate(coin, coinPos, Quaternion.identity);
-                    coinPos.x += 1f;
-
-                }
-                coinPos.x = coinPlatformPos.x - 3.8f;
-                coinPos.y = coinPlatformPos.y + 3f;
-                coinPos.z = 0;
-                for (int i = 0; i < 8; i++)
-                {
-                    Instantiate(coin, coinPos, Quaternion.identity);
-                    coinPos.x += 1f;
+                    coinPos.x += 1.5f;
 
                 }
 
@@ -416,7 +419,7 @@ public class AutoGeneratingMap : MonoBehaviour
                 randomEnemy = Random.Range(0, 2);
                 randomEnemyPosX = Random.Range(-5f, 5f);
                 enemyPos.x = nextPos.x - randomEnemyPosX;
-                enemyPos.y = nextPos.y + 1f;
+                enemyPos.y = nextPos.y + 5f;
                 Instantiate(enemies[randomEnemy], enemyPos, Quaternion.identity);
                 if (randomEnemy == 1)
                 {
@@ -429,8 +432,8 @@ public class AutoGeneratingMap : MonoBehaviour
                     enemyTrigger2Pos.x = enemyPos.x + 5f;
                 }
 
-                enemyTrigger1Pos.y = enemyPos.y;
-                enemyTrigger2Pos.y = enemyPos.y;
+                enemyTrigger1Pos.y = enemyPos.y - 3f;
+                enemyTrigger2Pos.y = enemyPos.y - 3f;
                 Instantiate(trigger1, enemyTrigger1Pos, Quaternion.identity);
                 Instantiate(trigger2, enemyTrigger2Pos, Quaternion.identity);
 
@@ -515,6 +518,29 @@ public class AutoGeneratingMap : MonoBehaviour
             currentLength = 39.2f;
             movingPlatform = false;
         }
+        else if (randomPlatform == 9)
+        {
+            currentLength = 8.7f;
+            movingPlatform = false;
+        }
+        else if (randomPlatform == 10)
+        {
+            currentLength = 5.8f;
+            movingPlatform = false;
+        }
+
+        else if (randomPlatform == 11)
+        {
+            currentLength = 1.4f;
+            movingPlatform = false;
+        }
+
+        else if (randomPlatform == 12)
+        {
+            currentLength = 3.3f;
+            movingPlatform = false;
+        }
+
 
 
     }

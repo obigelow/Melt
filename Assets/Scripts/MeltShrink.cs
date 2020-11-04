@@ -5,18 +5,18 @@ using UnityEngine;
 public class MeltShrink : MonoBehaviour
 {
 
-    public GameObject melt;
-
     private void FixedUpdate()
     {
-        melt.transform.localScale -= new Vector3(0.0005f, 0.0005f, 0.0005f);
+        gameObject.transform.localScale -= new Vector3(0.001f, 0.001f, 0.001f);
 
-        if (melt.transform.localScale.x <= 0f || melt.transform.localScale.y <= 0f)
+        if (gameObject.transform.localScale.x <= 0.5f || gameObject.transform.localScale.y <= 0.5f)
         {
+            GameManager.instance.GameOver();
             Destroy(gameObject);
+
         }
 
 
-        
+
     }
 }

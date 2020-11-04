@@ -16,6 +16,9 @@ public class MeltmanMovment : MonoBehaviour
 
     Animator anim;
 
+    public GameObject WinPanel;
+
+
     bool rightDown = true;
     bool leftDown = false;
     bool rightDownRun = false;
@@ -28,6 +31,7 @@ public class MeltmanMovment : MonoBehaviour
     bool damaged = false;
     bool dying = false;
     bool previousRight;
+    bool jumping = false;
 
 
     public GameObject shotLeft;
@@ -198,12 +202,16 @@ public class MeltmanMovment : MonoBehaviour
                 {
                     Vector3 shotPos = new Vector3((gameObject.transform.position.x + 1f), (gameObject.transform.position.y), (gameObject.transform.position.z));
                     Instantiate(shotRight, shotPos, Quaternion.identity);
+                    gameObject.transform.localScale -= new Vector3(1f, 1f, 0.001f);
+
 
                 }
                 if (leftDown || leftDownRun || shootRunningLeft || shootStandingLeft)
                 {
                     Vector3 shotPos = new Vector3((gameObject.transform.position.x - 1f), (gameObject.transform.position.y), (gameObject.transform.position.z));
                     Instantiate(shotLeft, shotPos, Quaternion.identity);
+                    gameObject.transform.localScale -= new Vector3(1f, 1f, 0.001f);
+
 
                 }
 
@@ -296,6 +304,7 @@ public class MeltmanMovment : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            jumping = true;
             if (jumpCount == 0)
             {
                 rb.AddForce(new Vector2(rb.velocity.x, jumpSpeed));
@@ -319,10 +328,32 @@ public class MeltmanMovment : MonoBehaviour
                 rb.AddForce(new Vector2(rb.velocity.x, jumpSpeed));
 
 
+
             }
             jumpCount++;
         }
 
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "FinalPlatform")
+        {
+            WinPanel.SetActive(true);
+            gameObject.transform.localScale = new Vector3(8f, 81f, 8f);
+
+        }
+
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "FinalPlatform")
+        {
+            WinPanel.SetActive(true);
+            gameObject.transform.localScale = new Vector3(8f, 81f, 8f);
+
+        }
     }
 
 
@@ -332,6 +363,7 @@ public class MeltmanMovment : MonoBehaviour
         {
             jumpCount = 0;
             rb.rotation = 0f;
+            jumping = false;
 
 
 
@@ -342,6 +374,8 @@ public class MeltmanMovment : MonoBehaviour
             rb.rotation = 0f;
 
             this.transform.parent = collision.transform;
+            jumping = false;
+
 
 
         }
@@ -350,28 +384,39 @@ public class MeltmanMovment : MonoBehaviour
             jumpCount = 0;
             rb.rotation = -45f;
             rb.gravityScale = 100;
+            jumping = false;
+
         }
         if (collision.gameObject.tag == "SlantGroundLeft")
         {
             jumpCount = 0;
             rb.rotation = 45f;
             rb.gravityScale = 65;
+            jumping = false;
+
 
         }
         if (collision.gameObject.tag == "Waste")
         {
-            gameObject.transform.localScale -= new Vector3(0.005f, 0.005f, 0.005f);
+            moveSpeed = 0;
+            jumpSpeed = 0;
+            gameObject.transform.localScale -= new Vector3(1f, 1f, 0f);
             damaged = true;
             if (previousRight)
             {
+
                 anim.SetTrigger("melt_damage_right");
 
             }
             else
             {
+
                 anim.SetTrigger("melt_damage_left");
+
             }
             damaged = false;
+            moveSpeed = 15;
+            jumpSpeed = 800;
 
 
 
@@ -389,6 +434,7 @@ public class MeltmanMovment : MonoBehaviour
             {
                 anim.SetTrigger("melt_death_left");
             }
+            GameManager.instance.GameOver();
 
         }
     }
