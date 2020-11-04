@@ -340,21 +340,12 @@ public class MeltmanMovment : MonoBehaviour
         if (collision.gameObject.tag == "FinalPlatform")
         {
             WinPanel.SetActive(true);
-            gameObject.transform.localScale = new Vector3(8f, 81f, 8f);
+            Destroy(gameObject);
 
         }
 
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "FinalPlatform")
-        {
-            WinPanel.SetActive(true);
-            gameObject.transform.localScale = new Vector3(8f, 81f, 8f);
-
-        }
-    }
 
 
     private void OnCollisionEnter2D(Collision2D collision)
